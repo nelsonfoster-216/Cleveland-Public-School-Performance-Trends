@@ -26,4 +26,8 @@ Thumbs.db
 
 # Package files
 *.tar.gz
-*.zip 
+*.zip
+
+# Exclude embedded repositories
+Cleveland-Public-School-Performance-Trends/
+Cleveland-Public-Schools-Performance-Analysis/ 
