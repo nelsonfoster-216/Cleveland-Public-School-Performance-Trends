@@ -1,0 +1,4 @@
+school_year,total_schools,total_enrollment,avg_enrollment,avg_value_added,avg_performance_index,schools_with_enrollment,schools_with_va,schools_with_pi
+2020-2021,111,40978,369.2,NA,39.7,111,0,110
+2021-2022,110,41063,373.3,1.69,53.8,110,109,110
+2022-2023,109,40481,371.4,1.22,55.2,109,108,108

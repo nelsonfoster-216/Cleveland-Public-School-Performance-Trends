@@ -1,0 +1,29 @@
+# R specific files
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# Data files (uncomment if you don't want to track large data files)
+# *.csv
+# *.xlsx
+# *.xls
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# PDF outputs (keeping Rplots.pdf as it might be important)
+# *.pdf
+
+# HTML cache
+*_cache/
+*_files/
+
+# Package files
+*.tar.gz
+*.zip 

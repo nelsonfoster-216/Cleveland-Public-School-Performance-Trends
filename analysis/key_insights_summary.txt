@@ -1,0 +1,10 @@
+=== CMSD PERFORMANCE ANALYSIS INSIGHTS ===
+
+District Overview : CMSD operates 112 schools serving approximately 40,000 students
+Performance Trend : District performance index improved by 15.5 points from 2020-21 to 2022-23
+Improvement Pattern : 96 schools improved while 4 schools declined
+High Performers : 21 schools consistently perform above 60 PI
+Low Performers : 27 schools consistently perform below 40 PI
+Value Added Impact : Schools with positive value-added tend to outperform expectations
+
+=== END INSIGHTS ===

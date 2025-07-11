@@ -1,0 +1,5 @@
+size_category,school_count,avg_performance_index,avg_enrollment,avg_value_added
+Large (400-599),34,53.2,466,0.73
+Medium (200-399),57,55.4,305,1.06
+Small (< 200),8,60.2,172,0.72
+Very Large (600+),9,57.5,649,4.51

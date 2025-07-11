@@ -1,0 +1,449 @@
+---
+title: "CMSD School Performance Analysis"
+subtitle: "Three-Year Transformation Story: 2020-2021 to 2022-2023"
+author: "Nelson Foster, Data Strategist Candidate"
+date: "`r Sys.Date()`"
+format: 
+  revealjs:
+    theme: default
+    transition: slide
+    incremental: false
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    width: 1200
+    height: 900
+    margin: 0.1
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(knitr)
+library(DT)
+
+# Load data
+cmsd_data <- read_csv("../data/processed/cmsd_consolidated_final.csv")
+district_trends <- read_csv("../analysis/district_performance_trends.csv")
+```
+
+## Executive Summary {.center}
+
+::: {.r-fit-text}
+**Cleveland Municipal School District**  
+**Remarkable Transformation: 2020-2023**
+:::
+
+::: {.incremental}
+- **112 schools** serving **~40,000 students**
+- **+15.5 point** Performance Index improvement
+- **96 schools improved** vs only **4 declined**
+- **21 schools** consistently high-performing
+- **Clear roadmap** for continued success
+:::
+
+## Agenda {background-color="#f8f9fa"}
+
+::: {.columns}
+::: {.column width="50%"}
+### Data & Methodology
+- Dataset overview
+- Quality assurance
+- Analysis approach
+
+### Performance Trends
+- District-wide improvement
+- Three-year trajectory
+- Enrollment stability
+:::
+
+::: {.column width="50%"}
+### Areas of Strength
+- Top performing schools
+- Improvement leaders
+- Success factors
+
+### Areas of Weakness
+- Schools needing support
+- Intervention priorities
+- Strategic recommendations
+:::
+:::
+
+# Data Foundation
+
+## Dataset Overview {.smaller}
+
+```{r}
+#| fig-width: 12
+#| fig-height: 6
+
+# Create summary table
+summary_stats <- district_trends %>%
+  select(school_year, total_schools, total_enrollment, avg_enrollment, 
+         avg_performance_index, schools_with_pi) %>%
+  mutate(
+    total_enrollment = scales::comma(total_enrollment),
+    avg_enrollment = round(avg_enrollment, 1),
+    avg_performance_index = round(avg_performance_index, 1)
+  )
+
+kable(summary_stats, 
+      col.names = c("School Year", "Schools", "Total Enrollment", 
+                   "Avg Enrollment", "Avg Performance Index", "Schools Reporting"),
+      caption = "CMSD Dataset Summary: Comprehensive Three-Year Analysis") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+::: {.callout-note}
+**Data Source**: Ohio Department of Education School Report Cards  
+**Scope**: Cleveland Municipal School District (IRN 043786)  
+**Quality**: 100% enrollment data, 99% performance index data
+:::
+
+## Methodology & Data Governance {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+### Data Sources
+- **Building Overview**: Enrollment data
+- **Achievement Ratings**: Performance Index scores  
+- **Value Added**: Growth measures
+- **Quality Assurance**: Multi-stage validation
+
+### Processing Pipeline
+- Automated R scripts
+- Error handling & validation
+- Reproducible analysis
+- Complete audit trail
+:::
+
+::: {.column width="50%"}
+### Key Metrics Defined
+- **Performance Index**: Overall school achievement (0-120 scale)
+- **Value Added**: Student growth beyond expectations
+- **Enrollment**: Total students per school
+- **School Year**: Academic year designation
+
+### Assignment Compliance
+✅ All required columns present  
+✅ Cleveland Municipal only (IRN 043786)  
+✅ Numeric formatting applied  
+✅ Three school years included
+:::
+:::
+
+# Performance Trends
+
+## District Performance Transformation {.center}
+
+![](assets/01_district_performance_trends.png){fig-align="center" width="90%"}
+
+::: {.callout-important}
+**Remarkable Achievement**: 15.5-point improvement represents a **39% increase** in district performance
+:::
+
+## Enrollment Stability Supports Growth {.center}
+
+![](assets/02_enrollment_trends.png){fig-align="center" width="90%"}
+
+::: {.callout-tip}
+**Strategic Insight**: Stable enrollment allows focus on quality improvement rather than capacity management
+:::
+
+## District Overview: The Complete Picture {.center}
+
+![](assets/11_trends_overview.png){fig-align="center" width="85%"}
+
+# Areas of Strength
+
+## Top Performing Schools: Excellence in Action {.center}
+
+![](assets/03_top_performers.png){fig-align="center" width="90%"}
+
+::: {.callout-note}
+**Leadership Examples**: These schools demonstrate what's possible across CMSD
+:::
+
+## Remarkable School Transformations {.center}
+
+![](assets/04_most_improved.png){fig-align="center" width="90%"}
+
+::: {.callout-tip}
+**Success Story**: Village Preparatory Schools lead with 40-50 point improvements
+:::
+
+## Key Strengths Summary {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+### High Performers (PI > 60)
+```{r}
+high_performers <- cmsd_data %>%
+  filter(school_year == "2022-2023", !is.na(performance_index_score)) %>%
+  arrange(desc(performance_index_score)) %>%
+  slice_head(n = 5) %>%
+  select(building_name, performance_index_score, enrollment) %>%
+  mutate(performance_index_score = round(performance_index_score, 1))
+
+kable(high_performers, 
+      col.names = c("School Name", "Performance Index", "Enrollment"),
+      caption = "Top 5 CMSD Schools") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12)
+```
+:::
+
+::: {.column width="50%"}
+### Improvement Leaders
+```{r}
+improving_leaders <- read_csv("../analysis/most_improved_schools.csv") %>%
+  slice_head(n = 5) %>%
+  select(building_name, improvement) %>%
+  mutate(improvement = paste0("+", round(improvement, 1)))
+
+kable(improving_leaders, 
+      col.names = c("School Name", "Point Improvement"),
+      caption = "Biggest Improvers (2020-23)") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12)
+```
+:::
+:::
+
+::: {.callout-important}
+**Strategic Opportunity**: Replicate successful practices from high-performing schools district-wide
+:::
+
+# Areas of Weakness
+
+## Schools Requiring Additional Support {.center}
+
+![](assets/05_struggling_schools.png){fig-align="center" width="90%"}
+
+::: {.callout-warning}
+**Intervention Priority**: Focus resources on these schools for maximum district impact
+:::
+
+## Performance Distribution Analysis {.center}
+
+![](assets/06_performance_distribution.png){fig-align="center" width="90%"}
+
+::: {.callout-note}
+**Distribution Insight**: Most schools cluster around district average, showing room for systematic improvement
+:::
+
+## The Complete Performance Spectrum {.center}
+
+![](assets/10_strengths_weaknesses.png){fig-align="center" width="95%"}
+
+# Strategic Insights
+
+## Value-Added Impact on Performance {.center}
+
+![](assets/07_value_added_relationship.png){fig-align="center" width="90%"}
+
+::: {.callout-tip}
+**Key Finding**: Strong correlation (r = 0.493) between value-added and performance index
+:::
+
+## School Size Optimization {.center}
+
+![](assets/08_size_performance.png){fig-align="center" width="90%"}
+
+::: {.callout-note}
+**Surprising Result**: Small schools (< 200 students) achieve highest average performance
+:::
+
+## Key Performance Metrics {.center}
+
+![](assets/09_key_metrics.png){fig-align="center" width="90%"}
+
+# Strategic Recommendations
+
+## Immediate Actions (2024-2025) {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+### Targeted Interventions
+- **Focus Schools**: 27 schools below 40 PI
+- **Resource Allocation**: Prioritize bottom 10 performers
+- **Support Teams**: Deploy experienced principals to struggling schools
+- **Mentorship Program**: Pair high and low performers
+
+### Quality Assurance
+- **Data Monitoring**: Monthly performance tracking
+- **Early Warning System**: Identify declining schools quickly
+- **Best Practice Sharing**: Quarterly leadership forums
+:::
+
+::: {.column width="50%"}
+### Success Replication
+- **Model Schools**: Study Village Preparatory turnaround
+- **Leadership Development**: Principal exchange programs
+- **Curriculum Alignment**: Implement successful practices
+- **Teacher Training**: Focus on value-added strategies
+
+### Infrastructure
+- **Small School Strategy**: Consider enrollment optimization
+- **Technology Integration**: Enhance data capabilities
+- **Community Engagement**: Strengthen school-family partnerships
+:::
+:::
+
+## Long-Term Vision (2025-2028) {.smaller}
+
+::: {.incremental}
+### Year 1: Foundation Building
+- Implement comprehensive school improvement plans
+- Establish district-wide performance monitoring system
+- Create peer learning networks between schools
+
+### Year 2: Acceleration
+- Expand successful programs to additional schools
+- Develop predictive analytics for early intervention
+- Launch community engagement initiatives
+
+### Year 3: Transformation
+- Achieve district-wide performance index of 65+
+- Eliminate schools below 40 PI
+- Establish CMSD as model urban district
+:::
+
+## Expected Outcomes & Metrics {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+### Short-Term (1 Year)
+- **5-point PI increase** district-wide
+- **Bottom 10 schools** show measurable improvement
+- **Zero schools** decline in performance
+- **Best practices** documented and shared
+
+### Medium-Term (2-3 Years)
+- **10-point PI increase** district-wide
+- **50% reduction** in schools below 40 PI
+- **Value-added positive** for 80% of schools
+- **Enrollment stability** maintained
+:::
+
+::: {.column width="50%"}
+### Long-Term (3-5 Years)
+- **District PI above 65** (national competitiveness)
+- **All schools above 40 PI** (basic proficiency)
+- **Recognition** as turnaround model
+- **Sustainable growth** systems in place
+
+### Success Indicators
+- Student achievement gains
+- Teacher retention improvement
+- Community satisfaction increase
+- College readiness enhancement
+:::
+:::
+
+## Implementation Roadmap {background-color="#f8f9fa"}
+
+::: {.timeline}
+### Phase 1: Immediate (Next 6 Months)
+- Deploy intervention teams to bottom 10 schools
+- Implement data monitoring systems
+- Begin principal mentorship program
+
+### Phase 2: Acceleration (6-18 Months)
+- Scale successful practices district-wide
+- Launch community engagement initiatives
+- Establish performance incentive systems
+
+### Phase 3: Sustainability (18+ Months)
+- Achieve systematic improvement across all schools
+- Build long-term capacity and leadership
+- Become model for other urban districts
+:::
+
+# Conclusion
+
+## CMSD: A Transformation Story {.center}
+
+::: {.r-fit-text}
+**From 39.7 to 55.2 Performance Index**  
+**A District Rising**
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### What We've Achieved
+- ✅ 15.5-point improvement
+- ✅ 96 schools improved  
+- ✅ Stable enrollment
+- ✅ Clear success models
+- ✅ Data-driven insights
+:::
+
+::: {.column width="50%"}
+### What's Next
+- 🎯 Focus on bottom 27 schools
+- 🎯 Replicate success models
+- 🎯 Reach 65+ district PI
+- 🎯 Eliminate failing schools
+- 🎯 Become national model
+:::
+:::
+
+## Questions & Discussion {.center}
+
+::: {.r-fit-text}
+**Thank you for your attention**
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### Data & Analysis
+- Complete dataset available
+- Reproducible R pipeline
+- Ongoing monitoring ready
+- Quality assurance built-in
+:::
+
+::: {.column width="50%"}
+### Next Steps
+- Implement recommendations
+- Monitor progress monthly
+- Adjust strategies as needed
+- Scale successful practices
+:::
+:::
+
+## Appendix: Technical Details {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+### Data Processing
+- **R Scripts**: Fully automated pipeline
+- **Quality Checks**: Multi-stage validation
+- **Reproducibility**: Complete audit trail
+- **Updates**: Ready for annual refresh
+
+### Statistical Methods
+- **Descriptive Analysis**: Trends and distributions
+- **Correlation Analysis**: Relationship identification
+- **Comparative Analysis**: School-level performance
+- **Predictive Insights**: Future performance indicators
+:::
+
+::: {.column width="50%"}
+### File Deliverables
+- `cmsd_consolidated_final.csv` - Main dataset
+- `cmsd_consolidated_final.xlsx` - Excel format  
+- Analysis scripts and documentation
+- Presentation materials and visualizations
+
+### Contact Information
+**Nelson Foster**  
+Data Strategist Candidate  
+Cleveland Municipal School District  
+*Committed to excellence in education through data-driven insights*
+:::
+::: 
